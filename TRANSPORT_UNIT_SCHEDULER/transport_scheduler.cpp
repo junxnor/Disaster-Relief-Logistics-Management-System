@@ -50,23 +50,13 @@ bool CircularQueue::displayVehicles()
         return false;
     }
     cout << "SUCCESS: Displaying Current Vehicle Schedule:\n";
-    cout << "+----------+------------------+\n";
-    cout << "| Position |    Vehicle ID    |\n";
-    cout << "+----------+------------------+\n";
 
     for (int i = 0; i < count; i++)
     {
         int index = (front + i) % MAX;
-        cout << "| " << (i + 1);
-        // Pad Position to 8 characters
-        for (int j = to_string(i + 1).length(); j < 8; j++)
-            cout << " ";
-        cout << " | " << vehicles[index];
-        // Pad Vehicle ID to 16 characters
-        for (int j = vehicles[index].length(); j < 16; j++)
-            cout << " ";
-        cout << " |\n";
+        cout << "Position: " << (i + 1)
+             << " | Vehicle ID: " << vehicles[index]
+             << endl;
     }
-    cout << "+----------+------------------+\n";
     return true;
 }

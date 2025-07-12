@@ -56,28 +56,15 @@ bool SupplyStack::viewPackedSupplies()
         return false;
     }
     cout << "SUCCESS: Displaying Packed Supply Boxes:\n";
-    cout << "+-------+---------------+----------+\n";
-    cout << "|  ID   |     Type      | Quantity |\n";
-    cout << "+-------+---------------+----------+\n";
 
     SupplyBox *temp = top;
     while (temp != NULL)
     {
-        cout << "| " << temp->id;
-        // Pad ID to 5 characters
-        for (int i = to_string(temp->id).length(); i < 5; i++)
-            cout << " ";
-        cout << " | " << temp->type;
-        // Pad Type to 13 characters
-        for (int i = temp->type.length(); i < 13; i++)
-            cout << " ";
-        cout << " | " << temp->quantity;
-        // Pad Quantity to 8 characters
-        for (int i = to_string(temp->quantity).length(); i < 8; i++)
-            cout << " ";
-        cout << " |\n";
+        cout << "ID: " << temp->id
+             << " | Type: " << temp->type
+             << " | Quantity: " << temp->quantity
+             << endl;
         temp = temp->next;
     }
-    cout << "+-------+---------------+----------+\n";
     return true;
 }

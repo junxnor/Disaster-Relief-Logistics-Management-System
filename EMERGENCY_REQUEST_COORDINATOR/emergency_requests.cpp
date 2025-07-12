@@ -70,28 +70,15 @@ bool EmergencyPriorityQueue::viewRequests()
         return false;
     }
     cout << "SUCCESS: Displaying Pending Emergency Requests:\n";
-    cout << "+------------------+------------------+----------+\n";
-    cout << "|     Location     |       Type       | Urgency  |\n";
-    cout << "+------------------+------------------+----------+\n";
 
     EmergencyRequest *temp = head;
     while (temp != NULL)
     {
-        cout << "| " << temp->location;
-        // Pad Location to 16 characters
-        for (int i = temp->location.length(); i < 16; i++)
-            cout << " ";
-        cout << " | " << temp->type;
-        // Pad Type to 16 characters
-        for (int i = temp->type.length(); i < 16; i++)
-            cout << " ";
-        cout << " | " << temp->urgency;
-        // Pad Urgency to 8 characters
-        for (int i = to_string(temp->urgency).length(); i < 8; i++)
-            cout << " ";
-        cout << " |\n";
+        cout << "Location: " << temp->location
+             << " | Type: " << temp->type
+             << " | Urgency: " << temp->urgency
+             << endl;
         temp = temp->next;
     }
-    cout << "+------------------+------------------+----------+\n";
     return true;
 }

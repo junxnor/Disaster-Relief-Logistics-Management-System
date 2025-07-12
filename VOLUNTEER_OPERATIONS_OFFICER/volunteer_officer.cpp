@@ -61,28 +61,15 @@ bool VolunteerQueue::viewVolunteers()
         return false;
     }
     cout << "SUCCESS: Displaying Registered Volunteers:\n";
-    cout << "+------------------+------------------+------------------+\n";
-    cout << "|       Name       |     Contact      |      Skill       |\n";
-    cout << "+------------------+------------------+------------------+\n";
 
     Volunteer *temp = front;
     while (temp != NULL)
     {
-        cout << "| " << temp->name;
-        // Pad Name to 16 characters
-        for (int i = temp->name.length(); i < 16; i++)
-            cout << " ";
-        cout << " | " << temp->contact;
-        // Pad Contact to 16 characters
-        for (int i = temp->contact.length(); i < 16; i++)
-            cout << " ";
-        cout << " | " << temp->skill;
-        // Pad Skill to 16 characters
-        for (int i = temp->skill.length(); i < 16; i++)
-            cout << " ";
-        cout << " |\n";
+        cout << "Name: " << temp->name
+             << " | Contact: " << temp->contact
+             << " | Skill: " << temp->skill
+             << endl;
         temp = temp->next;
     }
-    cout << "+------------------+------------------+------------------+\n";
     return true;
 }

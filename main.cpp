@@ -1,10 +1,18 @@
 #include <iostream>
+#include <conio.h>
 #include "SUPPLY_BASE_MANAGER/supply_manager.hpp"
 #include "VOLUNTEER_OPERATIONS_OFFICER/volunteer_officer.hpp"
 #include "EMERGENCY_REQUEST_COORDINATOR/emergency_requests.hpp"
 #include "TRANSPORT_UNIT_SCHEDULER/transport_scheduler.hpp"
 
 using namespace std;
+
+void pressAnyKeyToContinue()
+{
+    cout << "\nPress any key to continue...";
+    _getch();
+    cout << "\n";
+}
 
 void supplyMenu(SupplyStack &supply)
 {
@@ -19,20 +27,42 @@ void supplyMenu(SupplyStack &supply)
         cout << "Enter choice: ";
         cin >> choice;
 
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            choice = -1; // Set to invalid choice to show error
+        }
+
         if (choice == 1)
         {
             int id, quantity;
             string type;
             cout << "Enter Box ID: ";
             cin >> id;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "ERROR: Invalid input for Box ID.\n";
+                continue;
+            }
             cout << "Enter Type (e.g., Food, Medical): ";
             cin >> type;
             cout << "Enter Quantity: ";
             cin >> quantity;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "ERROR: Invalid input for Quantity.\n";
+                continue;
+            }
             if (!supply.packSupplyBox(id, type, quantity))
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 2)
         {
@@ -40,6 +70,7 @@ void supplyMenu(SupplyStack &supply)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 3)
         {
@@ -47,6 +78,7 @@ void supplyMenu(SupplyStack &supply)
             {
                 cout << "No data to display.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice != 0)
         {
@@ -68,6 +100,13 @@ void volunteerMenu(VolunteerQueue &volunteer)
         cout << "Enter choice: ";
         cin >> choice;
 
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            choice = -1; // Set to invalid choice to show error
+        }
+
         if (choice == 1)
         {
             string name, contact, skill;
@@ -81,6 +120,7 @@ void volunteerMenu(VolunteerQueue &volunteer)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 2)
         {
@@ -88,6 +128,7 @@ void volunteerMenu(VolunteerQueue &volunteer)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 3)
         {
@@ -95,6 +136,7 @@ void volunteerMenu(VolunteerQueue &volunteer)
             {
                 cout << "No data to display.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice != 0)
         {
@@ -116,6 +158,13 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
         cout << "Enter choice: ";
         cin >> choice;
 
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            choice = -1; // Set to invalid choice to show error
+        }
+
         if (choice == 1)
         {
             string location, type;
@@ -126,10 +175,18 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             cin >> type;
             cout << "Enter Urgency (1-10): ";
             cin >> urgency;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "ERROR: Invalid input for Urgency.\n";
+                continue;
+            }
             if (!emergency.logRequest(location, type, urgency))
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 2)
         {
@@ -137,6 +194,7 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 3)
         {
@@ -144,6 +202,7 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             {
                 cout << "No data to display.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice != 0)
         {
@@ -165,6 +224,13 @@ void transportMenu(CircularQueue &transport)
         cout << "Enter choice: ";
         cin >> choice;
 
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            choice = -1; // Set to invalid choice to show error
+        }
+
         if (choice == 1)
         {
             string id;
@@ -174,6 +240,7 @@ void transportMenu(CircularQueue &transport)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 2)
         {
@@ -181,6 +248,7 @@ void transportMenu(CircularQueue &transport)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice == 3)
         {
@@ -188,6 +256,7 @@ void transportMenu(CircularQueue &transport)
             {
                 cout << "No data to display.\n";
             }
+            pressAnyKeyToContinue();
         }
         else if (choice != 0)
         {
@@ -214,6 +283,13 @@ int main()
         cout << "0. Exit System\n";
         cout << "Select a role to manage: ";
         cin >> mainChoice;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            mainChoice = -1; // Set to invalid choice to show error
+        }
 
         switch (mainChoice)
         {
