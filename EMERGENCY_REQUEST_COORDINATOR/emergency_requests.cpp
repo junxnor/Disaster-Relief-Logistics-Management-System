@@ -69,7 +69,7 @@ bool EmergencyPriorityQueue::viewRequests()
         cout << "WARNING: No pending emergency requests.\n";
         return false;
     }
-    cout << "SUCCESS: Displaying Pending Emergency Requests:\n";
+    cout << "\n========== Pending Emergency Requests ==========\n";
 
     EmergencyRequest *temp = head;
     while (temp != NULL)

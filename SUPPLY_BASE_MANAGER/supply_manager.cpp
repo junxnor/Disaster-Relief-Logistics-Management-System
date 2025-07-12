@@ -55,7 +55,7 @@ bool SupplyStack::viewPackedSupplies()
         cout << "WARNING: No supplies currently packed.\n";
         return false;
     }
-    cout << "SUCCESS: Displaying Packed Supply Boxes:\n";
+    cout << "\n========== Packed Supplies Storage ==========\n";
 
     SupplyBox *temp = top;
     while (temp != NULL)

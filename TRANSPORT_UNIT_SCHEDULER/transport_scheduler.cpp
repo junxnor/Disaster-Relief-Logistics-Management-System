@@ -49,7 +49,7 @@ bool CircularQueue::displayVehicles()
         cout << "WARNING: No vehicles scheduled.\n";
         return false;
     }
-    cout << "SUCCESS: Displaying Current Vehicle Schedule:\n";
+    cout << "\n========== Current Vehicle Schedule ==========\n";
 
     for (int i = 0; i < count; i++)
     {

@@ -60,7 +60,7 @@ bool VolunteerQueue::viewVolunteers()
         cout << "WARNING: No registered volunteers.\n";
         return false;
     }
-    cout << "SUCCESS: Displaying Registered Volunteers:\n";
+    cout << "\n========== Registered Volunteers ==========\n";
 
     Volunteer *temp = front;
     while (temp != NULL)
