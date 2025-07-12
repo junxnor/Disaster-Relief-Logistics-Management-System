@@ -20,9 +20,9 @@ private:
 public:
     SupplyStack();
     ~SupplyStack();
-    void packSupplyBox(int id, string type, int quantity); // Push
-    void sendSupplyPackage();                              // Pop
-    void viewPackedSupplies();                             // Display
+    bool packSupplyBox(int id, string type, int quantity); // Push
+    bool sendSupplyPackage();                              // Pop
+    bool viewPackedSupplies();                             // Display
 };
 
 #endif

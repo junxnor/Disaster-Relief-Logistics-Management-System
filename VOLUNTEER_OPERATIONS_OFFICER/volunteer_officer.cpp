@@ -15,8 +15,14 @@ VolunteerQueue::~VolunteerQueue()
     }
 }
 
-void VolunteerQueue::registerVolunteer(string name, string contact, string skill)
+bool VolunteerQueue::registerVolunteer(string name, string contact, string skill)
 {
+    if (name.empty() || contact.empty() || skill.empty())
+    {
+        cout << "ERROR: All fields (name, contact, skill) must be provided.\n";
+        return false;
+    }
+
     Volunteer *newVol = new Volunteer{name, contact, skill, NULL};
     if (rear == NULL)
     {
@@ -27,36 +33,56 @@ void VolunteerQueue::registerVolunteer(string name, string contact, string skill
         rear->next = newVol;
         rear = newVol;
     }
-    cout << "Volunteer Registered: " << name << "\n";
+    cout << "SUCCESS: Volunteer Registered: " << name << "\n";
+    return true;
 }
 
-void VolunteerQueue::deployVolunteer()
+bool VolunteerQueue::deployVolunteer()
 {
     if (front == NULL)
     {
-        cout << "No volunteers to deploy.\n";
-        return;
+        cout << "ERROR: No volunteers to deploy.\n";
+        return false;
     }
     Volunteer *temp = front;
-    cout << "Deploying Volunteer: " << temp->name << "\n";
+    cout << "SUCCESS: Deploying Volunteer: " << temp->name << "\n";
     front = front->next;
     if (front == NULL)
         rear = NULL;
     delete temp;
+    return true;
 }
 
-void VolunteerQueue::viewVolunteers()
+bool VolunteerQueue::viewVolunteers()
 {
     if (front == NULL)
     {
-        cout << "No registered volunteers.\n";
-        return;
+        cout << "WARNING: No registered volunteers.\n";
+        return false;
     }
+    cout << "SUCCESS: Displaying Registered Volunteers:\n";
+    cout << "+------------------+------------------+------------------+\n";
+    cout << "|       Name       |     Contact      |      Skill       |\n";
+    cout << "+------------------+------------------+------------------+\n";
+
     Volunteer *temp = front;
-    cout << "Registered Volunteers:\n";
     while (temp != NULL)
     {
-        cout << temp->name << " | " << temp->contact << " | " << temp->skill << "\n";
+        cout << "| " << temp->name;
+        // Pad Name to 16 characters
+        for (int i = temp->name.length(); i < 16; i++)
+            cout << " ";
+        cout << " | " << temp->contact;
+        // Pad Contact to 16 characters
+        for (int i = temp->contact.length(); i < 16; i++)
+            cout << " ";
+        cout << " | " << temp->skill;
+        // Pad Skill to 16 characters
+        for (int i = temp->skill.length(); i < 16; i++)
+            cout << " ";
+        cout << " |\n";
         temp = temp->next;
     }
+    cout << "+------------------+------------------+------------------+\n";
+    return true;
 }

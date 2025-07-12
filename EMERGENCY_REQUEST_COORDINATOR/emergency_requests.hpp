@@ -20,9 +20,9 @@ private:
 public:
     EmergencyPriorityQueue();
     ~EmergencyPriorityQueue();
-    void logRequest(string location, string type, int urgency); // Insert sorted
-    void processCritical();                                     // Remove highest
-    void viewRequests();                                        // Display all
+    bool logRequest(string location, string type, int urgency); // Insert sorted
+    bool processCritical();                                     // Remove highest
+    bool viewRequests();                                        // Display all
 };
 
 #endif

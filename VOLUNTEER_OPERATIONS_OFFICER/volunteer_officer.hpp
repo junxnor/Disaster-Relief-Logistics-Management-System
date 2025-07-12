@@ -4,23 +4,26 @@
 #include <iostream>
 using namespace std;
 
-struct Volunteer {
+struct Volunteer
+{
     string name;
     string contact;
     string skill;
-    Volunteer* next;
+    Volunteer *next;
 };
 
-class VolunteerQueue {
+class VolunteerQueue
+{
 private:
-    Volunteer* front;
-    Volunteer* rear;
+    Volunteer *front;
+    Volunteer *rear;
+
 public:
     VolunteerQueue();
     ~VolunteerQueue();
-    void registerVolunteer(string name, string contact, string skill); // Enqueue
-    void deployVolunteer();                                            // Dequeue
-    void viewVolunteers();                                             // Display
+    bool registerVolunteer(string name, string contact, string skill); // Enqueue
+    bool deployVolunteer();                                            // Dequeue
+    bool viewVolunteers();                                             // Display
 };
 
 #endif

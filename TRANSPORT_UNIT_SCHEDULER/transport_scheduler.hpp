@@ -14,9 +14,9 @@ private:
 
 public:
     CircularQueue();
-    void addVehicle(string id);
-    void rotateVehicle(); // Dequeue + Enqueue
-    void displayVehicles();
+    bool addVehicle(string id);
+    bool rotateVehicle(); // Dequeue + Enqueue
+    bool displayVehicles();
 };
 
 #endif

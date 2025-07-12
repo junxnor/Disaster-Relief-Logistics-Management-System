@@ -29,15 +29,28 @@ void supplyMenu(SupplyStack &supply)
             cin >> type;
             cout << "Enter Quantity: ";
             cin >> quantity;
-            supply.packSupplyBox(id, type, quantity);
+            if (!supply.packSupplyBox(id, type, quantity))
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 2)
         {
-            supply.sendSupplyPackage();
+            if (!supply.sendSupplyPackage())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 3)
         {
-            supply.viewPackedSupplies();
+            if (!supply.viewPackedSupplies())
+            {
+                cout << "No data to display.\n";
+            }
+        }
+        else if (choice != 0)
+        {
+            cout << "ERROR: Invalid choice. Please select 0-3.\n";
         }
     } while (choice != 0);
 }
@@ -64,15 +77,28 @@ void volunteerMenu(VolunteerQueue &volunteer)
             cin >> contact;
             cout << "Enter Skill Area: ";
             cin >> skill;
-            volunteer.registerVolunteer(name, contact, skill);
+            if (!volunteer.registerVolunteer(name, contact, skill))
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 2)
         {
-            volunteer.deployVolunteer();
+            if (!volunteer.deployVolunteer())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 3)
         {
-            volunteer.viewVolunteers();
+            if (!volunteer.viewVolunteers())
+            {
+                cout << "No data to display.\n";
+            }
+        }
+        else if (choice != 0)
+        {
+            cout << "ERROR: Invalid choice. Please select 0-3.\n";
         }
     } while (choice != 0);
 }
@@ -100,15 +126,28 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             cin >> type;
             cout << "Enter Urgency (1-10): ";
             cin >> urgency;
-            emergency.logRequest(location, type, urgency);
+            if (!emergency.logRequest(location, type, urgency))
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 2)
         {
-            emergency.processCritical();
+            if (!emergency.processCritical())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 3)
         {
-            emergency.viewRequests();
+            if (!emergency.viewRequests())
+            {
+                cout << "No data to display.\n";
+            }
+        }
+        else if (choice != 0)
+        {
+            cout << "ERROR: Invalid choice. Please select 0-3.\n";
         }
     } while (choice != 0);
 }
@@ -131,15 +170,28 @@ void transportMenu(CircularQueue &transport)
             string id;
             cout << "Enter Vehicle ID: ";
             cin >> id;
-            transport.addVehicle(id);
+            if (!transport.addVehicle(id))
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 2)
         {
-            transport.rotateVehicle();
+            if (!transport.rotateVehicle())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
         }
         else if (choice == 3)
         {
-            transport.displayVehicles();
+            if (!transport.displayVehicles())
+            {
+                cout << "No data to display.\n";
+            }
+        }
+        else if (choice != 0)
+        {
+            cout << "ERROR: Invalid choice. Please select 0-3.\n";
         }
     } while (choice != 0);
 }
@@ -166,22 +218,26 @@ int main()
         switch (mainChoice)
         {
         case 1:
+            cout << "Accessing Supply Base Manager...\n";
             supplyMenu(supply);
             break;
         case 2:
+            cout << "Accessing Volunteer Operations Officer...\n";
             volunteerMenu(volunteer);
             break;
         case 3:
+            cout << "Accessing Emergency Request Coordinator...\n";
             emergencyMenu(emergency);
             break;
         case 4:
+            cout << "Accessing Transport Unit Scheduler...\n";
             transportMenu(transport);
             break;
         case 0:
-            cout << "Exiting system...\n";
+            cout << "SUCCESS: Exiting system... Goodbye!\n";
             break;
         default:
-            cout << "Invalid choice. Try again.\n";
+            cout << "ERROR: Invalid choice. Please select a number between 0-4.\n";
         }
     } while (mainChoice != 0);
 
