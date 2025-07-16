@@ -2,6 +2,8 @@
 #define SUPPLY_MANAGER_HPP
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 struct SupplyBox
@@ -23,6 +25,8 @@ public:
     bool packSupplyBox(int id, string type, int quantity); // Push
     bool sendSupplyPackage();                              // Pop
     bool viewPackedSupplies();                             // Display
+    bool saveToCSV();                                      // Save to CSV
+    bool loadFromCSV();                                    // Load from CSV
 };
 
 #endif

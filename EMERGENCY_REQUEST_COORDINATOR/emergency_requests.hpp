@@ -2,6 +2,8 @@
 #define EMERGENCY_REQUESTS_HPP
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 struct EmergencyRequest
@@ -23,6 +25,8 @@ public:
     bool logRequest(string location, string type, int urgency); // Insert sorted
     bool processCritical();                                     // Remove highest
     bool viewRequests();                                        // Display all
+    bool saveToCSV();                                           // Save to CSV
+    bool loadFromCSV();                                         // Load from CSV
 };
 
 #endif

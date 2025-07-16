@@ -68,3 +68,63 @@ bool SupplyStack::viewPackedSupplies()
     }
     return true;
 }
+
+bool SupplyStack::saveToCSV()
+{
+    ofstream file("supply_data.csv");
+    if (!file.is_open())
+    {
+        return false;
+    }
+
+    file << "ID,Type,Quantity\n";
+
+    SupplyBox *temp = top;
+    while (temp != NULL)
+    {
+        file << temp->id << "," << temp->type << "," << temp->quantity << "\n";
+        temp = temp->next;
+    }
+
+    file.close();
+    return true;
+}
+
+bool SupplyStack::loadFromCSV()
+{
+    ifstream file("supply_data.csv");
+    if (!file.is_open())
+    {
+        return true;
+    }
+
+    string line;
+    getline(file, line);
+
+    while (top != NULL)
+    {
+        SupplyBox *temp = top;
+        top = top->next;
+        delete temp;
+    }
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string idStr, type, quantityStr;
+
+        if (getline(ss, idStr, ',') &&
+            getline(ss, type, ',') &&
+            getline(ss, quantityStr, ','))
+        {
+            int id = stoi(idStr);
+            int quantity = stoi(quantityStr);
+
+            SupplyBox *newBox = new SupplyBox{id, type, quantity, top};
+            top = newBox;
+        }
+    }
+
+    file.close();
+    return true;
+}

@@ -31,7 +31,7 @@ void supplyMenu(SupplyStack &supply)
         {
             cin.clear();
             cin.ignore(10000, '\n');
-            choice = -1; // Set to invalid choice to show error
+            choice = -1;
         }
 
         if (choice == 1)
@@ -48,7 +48,8 @@ void supplyMenu(SupplyStack &supply)
                 continue;
             }
             cout << "Enter Type (e.g., Food, Medical): ";
-            cin >> type;
+            cin.ignore();
+            getline(cin, type);
             cout << "Enter Quantity: ";
             cin >> quantity;
             if (cin.fail())
@@ -62,6 +63,10 @@ void supplyMenu(SupplyStack &supply)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            else
+            {
+                supply.saveToCSV();
+            }
             pressAnyKeyToContinue();
         }
         else if (choice == 2)
@@ -74,6 +79,7 @@ void supplyMenu(SupplyStack &supply)
         }
         else if (choice == 3)
         {
+            supply.loadFromCSV();
             if (!supply.viewPackedSupplies())
             {
                 cout << "No data to display.\n";
@@ -104,21 +110,26 @@ void volunteerMenu(VolunteerQueue &volunteer)
         {
             cin.clear();
             cin.ignore(10000, '\n');
-            choice = -1; // Set to invalid choice to show error
+            choice = -1;
         }
 
         if (choice == 1)
         {
             string name, contact, skill;
             cout << "Enter Name: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter Contact: ";
-            cin >> contact;
+            getline(cin, contact);
             cout << "Enter Skill Area: ";
-            cin >> skill;
+            getline(cin, skill);
             if (!volunteer.registerVolunteer(name, contact, skill))
             {
                 cout << "Operation failed. Please try again.\n";
+            }
+            else
+            {
+                volunteer.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -132,6 +143,7 @@ void volunteerMenu(VolunteerQueue &volunteer)
         }
         else if (choice == 3)
         {
+            volunteer.loadFromCSV();
             if (!volunteer.viewVolunteers())
             {
                 cout << "No data to display.\n";
@@ -162,7 +174,7 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
         {
             cin.clear();
             cin.ignore(10000, '\n');
-            choice = -1; // Set to invalid choice to show error
+            choice = -1;
         }
 
         if (choice == 1)
@@ -170,9 +182,10 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             string location, type;
             int urgency;
             cout << "Enter Location: ";
-            cin >> location;
+            cin.ignore();
+            getline(cin, location);
             cout << "Enter Type (e.g., Medical, Food): ";
-            cin >> type;
+            getline(cin, type);
             cout << "Enter Urgency (1-10): ";
             cin >> urgency;
             if (cin.fail())
@@ -186,6 +199,10 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            else
+            {
+                emergency.saveToCSV();
+            }
             pressAnyKeyToContinue();
         }
         else if (choice == 2)
@@ -198,6 +215,7 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
         }
         else if (choice == 3)
         {
+            emergency.loadFromCSV();
             if (!emergency.viewRequests())
             {
                 cout << "No data to display.\n";
@@ -228,17 +246,22 @@ void transportMenu(CircularQueue &transport)
         {
             cin.clear();
             cin.ignore(10000, '\n');
-            choice = -1; // Set to invalid choice to show error
+            choice = -1;
         }
 
         if (choice == 1)
         {
             string id;
             cout << "Enter Vehicle ID: ";
-            cin >> id;
+            cin.ignore();
+            getline(cin, id);
             if (!transport.addVehicle(id))
             {
                 cout << "Operation failed. Please try again.\n";
+            }
+            else
+            {
+                transport.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -252,6 +275,7 @@ void transportMenu(CircularQueue &transport)
         }
         else if (choice == 3)
         {
+            transport.loadFromCSV();
             if (!transport.displayVehicles())
             {
                 cout << "No data to display.\n";
@@ -288,7 +312,7 @@ int main()
         {
             cin.clear();
             cin.ignore(10000, '\n');
-            mainChoice = -1; // Set to invalid choice to show error
+            mainChoice = -1;
         }
 
         switch (mainChoice)

@@ -60,3 +60,57 @@ bool CircularQueue::displayVehicles()
     }
     return true;
 }
+
+bool CircularQueue::saveToCSV()
+{
+    ofstream file("transport_data.csv");
+    if (!file.is_open())
+    {
+        return false;
+    }
+
+    file << "Position,VehicleID\n";
+
+    for (int i = 0; i < count; i++)
+    {
+        int index = (front + i) % MAX;
+        file << (i + 1) << "," << vehicles[index] << "\n";
+    }
+
+    file.close();
+    return true;
+}
+
+bool CircularQueue::loadFromCSV()
+{
+    ifstream file("transport_data.csv");
+    if (!file.is_open())
+    {
+        return true;
+    }
+
+    string line;
+    getline(file, line);
+
+    front = rear = -1;
+    count = 0;
+
+    while (getline(file, line) && count < MAX)
+    {
+        stringstream ss(line);
+        string positionStr, vehicleID;
+
+        if (getline(ss, positionStr, ',') &&
+            getline(ss, vehicleID, ','))
+        {
+            if (front == -1)
+                front = 0;
+            rear = (rear + 1) % MAX;
+            vehicles[rear] = vehicleID;
+            count++;
+        }
+    }
+
+    file.close();
+    return true;
+}

@@ -82,3 +82,75 @@ bool EmergencyPriorityQueue::viewRequests()
     }
     return true;
 }
+
+bool EmergencyPriorityQueue::saveToCSV()
+{
+    ofstream file("emergency_data.csv");
+    if (!file.is_open())
+    {
+        return false;
+    }
+
+    file << "Location,Type,Urgency\n";
+
+    EmergencyRequest *temp = head;
+    while (temp != NULL)
+    {
+        file << temp->location << "," << temp->type << "," << temp->urgency << "\n";
+        temp = temp->next;
+    }
+
+    file.close();
+    return true;
+}
+
+bool EmergencyPriorityQueue::loadFromCSV()
+{
+    ifstream file("emergency_data.csv");
+    if (!file.is_open())
+    {
+        return true;
+    }
+
+    string line;
+    getline(file, line);
+
+    while (head != NULL)
+    {
+        EmergencyRequest *temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string location, type, urgencyStr;
+
+        if (getline(ss, location, ',') &&
+            getline(ss, type, ',') &&
+            getline(ss, urgencyStr, ','))
+        {
+            int urgency = stoi(urgencyStr);
+
+            EmergencyRequest *newReq = new EmergencyRequest{location, type, urgency, NULL};
+
+            if (head == NULL || urgency > head->urgency)
+            {
+                newReq->next = head;
+                head = newReq;
+            }
+            else
+            {
+                EmergencyRequest *temp = head;
+                while (temp->next != NULL && temp->next->urgency >= urgency)
+                    temp = temp->next;
+                newReq->next = temp->next;
+                temp->next = newReq;
+            }
+        }
+    }
+
+    file.close();
+    return true;
+}
