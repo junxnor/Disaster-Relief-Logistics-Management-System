@@ -75,6 +75,10 @@ void supplyMenu(SupplyStack &supply)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            else
+            {
+                supply.saveToCSV(); // Auto-save after sending package
+            }
             pressAnyKeyToContinue();
         }
         else if (choice == 3)
@@ -138,6 +142,10 @@ void volunteerMenu(VolunteerQueue &volunteer)
             if (!volunteer.deployVolunteer())
             {
                 cout << "Operation failed. Please try again.\n";
+            }
+            else
+            {
+                volunteer.saveToCSV(); // Auto-save after deploying volunteer
             }
             pressAnyKeyToContinue();
         }
@@ -211,6 +219,10 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             {
                 cout << "Operation failed. Please try again.\n";
             }
+            else
+            {
+                emergency.saveToCSV(); // Auto-save after processing critical request
+            }
             pressAnyKeyToContinue();
         }
         else if (choice == 3)
@@ -270,6 +282,10 @@ void transportMenu(CircularQueue &transport)
             if (!transport.rotateVehicle())
             {
                 cout << "Operation failed. Please try again.\n";
+            }
+            else
+            {
+                transport.saveToCSV(); // Auto-save after rotating vehicle
             }
             pressAnyKeyToContinue();
         }
