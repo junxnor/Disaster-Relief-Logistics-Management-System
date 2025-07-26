@@ -27,6 +27,9 @@ public:
     bool viewPackedSupplies();                             // Display
     bool saveToCSV();                                      // Save to CSV
     bool loadFromCSV();                                    // Load from CSV
+    bool assignSupplyToEmergency();                        // Integration function
+    bool viewPackedSuppliesWithSelection();                // Helper for integration
+    bool removeSupplyBoxById(int id);                      // Helper for integration
 };
 
 #endif

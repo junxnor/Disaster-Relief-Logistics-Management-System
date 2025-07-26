@@ -77,7 +77,7 @@ void supplyMenu(SupplyStack &supply)
             }
             else
             {
-                supply.saveToCSV(); // Auto-save after sending package
+                supply.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -145,7 +145,7 @@ void volunteerMenu(VolunteerQueue &volunteer)
             }
             else
             {
-                volunteer.saveToCSV(); // Auto-save after deploying volunteer
+                volunteer.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -221,7 +221,7 @@ void emergencyMenu(EmergencyPriorityQueue &emergency)
             }
             else
             {
-                emergency.saveToCSV(); // Auto-save after processing critical request
+                emergency.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -285,7 +285,7 @@ void transportMenu(CircularQueue &transport)
             }
             else
             {
-                transport.saveToCSV(); // Auto-save after rotating vehicle
+                transport.saveToCSV();
             }
             pressAnyKeyToContinue();
         }
@@ -295,6 +295,57 @@ void transportMenu(CircularQueue &transport)
             if (!transport.displayVehicles())
             {
                 cout << "No data to display.\n";
+            }
+            pressAnyKeyToContinue();
+        }
+        else if (choice != 0)
+        {
+            cout << "ERROR: Invalid choice. Please select 0-3.\n";
+        }
+    } while (choice != 0);
+}
+
+void integrationMenu(SupplyStack &supply, VolunteerQueue &volunteer, EmergencyPriorityQueue &emergency, CircularQueue &transport)
+{
+    int choice;
+    do
+    {
+        cout << "\n--- Integration Operations Menu ---\n";
+        cout << "1. Assign Supply to Emergency Request\n";
+        cout << "2. Deploy Volunteer to Emergency\n";
+        cout << "3. Schedule Vehicle for Supply Delivery\n";
+        cout << "0. Back to Main Menu\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            choice = -1;
+        }
+
+        if (choice == 1)
+        {
+            if (!supply.assignSupplyToEmergency())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
+            pressAnyKeyToContinue();
+        }
+        else if (choice == 2)
+        {
+            if (!volunteer.deployVolunteerToEmergency())
+            {
+                cout << "Operation failed. Please try again.\n";
+            }
+            pressAnyKeyToContinue();
+        }
+        else if (choice == 3)
+        {
+            if (!transport.scheduleVehicleForSupplyDelivery())
+            {
+                cout << "Operation failed. Please try again.\n";
             }
             pressAnyKeyToContinue();
         }
@@ -320,6 +371,7 @@ int main()
         cout << "2. Volunteer Operations Officer\n";
         cout << "3. Emergency Request Coordinator\n";
         cout << "4. Transport Unit Scheduler\n";
+        cout << "5. Integration Operations\n";
         cout << "0. Exit System\n";
         cout << "Select a role to manage: ";
         cin >> mainChoice;
@@ -349,11 +401,15 @@ int main()
             cout << "Accessing Transport Unit Scheduler...\n";
             transportMenu(transport);
             break;
+        case 5:
+            cout << "Accessing Integration Operations...\n";
+            integrationMenu(supply, volunteer, emergency, transport);
+            break;
         case 0:
             cout << "SUCCESS: Exiting system... Goodbye!\n";
             break;
         default:
-            cout << "ERROR: Invalid choice. Please select a number between 0-4.\n";
+            cout << "ERROR: Invalid choice. Please select a number between 0-5.\n";
         }
     } while (mainChoice != 0);
 

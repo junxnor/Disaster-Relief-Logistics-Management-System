@@ -28,6 +28,9 @@ public:
     bool viewVolunteers();                                             // Display
     bool saveToCSV();                                                  // Save to CSV
     bool loadFromCSV();                                                // Load from CSV
+    bool deployVolunteerToEmergency();                                 // Integration function
+    bool viewVolunteersWithSelection();                                // Helper for integration
+    bool removeVolunteerByName(string name);                           // Helper for integration
 };
 
 #endif

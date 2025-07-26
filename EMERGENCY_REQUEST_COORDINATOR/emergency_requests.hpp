@@ -27,6 +27,8 @@ public:
     bool viewRequests();                                        // Display all
     bool saveToCSV();                                           // Save to CSV
     bool loadFromCSV();                                         // Load from CSV
+    bool viewRequestsWithSelection();                           // Helper for integration
+    bool viewCriticalRequestsWithSelection();                   // Helper for integration
 };
 
 #endif

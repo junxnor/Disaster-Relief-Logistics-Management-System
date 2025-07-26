@@ -154,3 +154,56 @@ bool EmergencyPriorityQueue::loadFromCSV()
     file.close();
     return true;
 }
+
+bool EmergencyPriorityQueue::viewRequestsWithSelection()
+{
+    if (head == NULL)
+    {
+        cout << "WARNING: No emergency requests pending.\n";
+        return false;
+    }
+
+    cout << "\n========== Pending Emergency Requests (by Priority) ==========\n";
+    cout << "Priority\t| Location\t\t| Type\n";
+    cout << "---------------------------------------------------\n";
+
+    EmergencyRequest *temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->urgency << "\t\t| " << temp->location << "\t\t| " << temp->type << endl;
+        temp = temp->next;
+    }
+    return true;
+}
+
+bool EmergencyPriorityQueue::viewCriticalRequestsWithSelection()
+{
+    if (head == NULL)
+    {
+        cout << "WARNING: No emergency requests pending.\n";
+        return false;
+    }
+
+    cout << "\n========== Critical Emergency Requests (Priority 8+) ==========\n";
+    cout << "Priority\t| Location\t\t| Type\n";
+    cout << "---------------------------------------------------\n";
+
+    bool hasCritical = false;
+    EmergencyRequest *temp = head;
+    while (temp != NULL)
+    {
+        if (temp->urgency >= 8)
+        {
+            cout << temp->urgency << "\t\t| " << temp->location << "\t\t| " << temp->type << endl;
+            hasCritical = true;
+        }
+        temp = temp->next;
+    }
+
+    if (!hasCritical)
+    {
+        cout << "No critical emergency requests found.\n";
+        return false;
+    }
+    return true;
+}

@@ -1,4 +1,6 @@
 #include "supply_manager.hpp"
+#include "../EMERGENCY_REQUEST_COORDINATOR/emergency_requests.hpp"
+#include <cctype>
 
 SupplyStack::SupplyStack()
 {
@@ -108,6 +110,8 @@ bool SupplyStack::loadFromCSV()
         delete temp;
     }
 
+    SupplyBox *tempHead = NULL;
+
     while (getline(file, line))
     {
         stringstream ss(line);
@@ -120,11 +124,138 @@ bool SupplyStack::loadFromCSV()
             int id = stoi(idStr);
             int quantity = stoi(quantityStr);
 
-            SupplyBox *newBox = new SupplyBox{id, type, quantity, top};
-            top = newBox;
+            SupplyBox *newBox = new SupplyBox{id, type, quantity, tempHead};
+            tempHead = newBox;
         }
+    }
+
+    while (tempHead != NULL)
+    {
+        SupplyBox *temp = tempHead;
+        tempHead = tempHead->next;
+
+        temp->next = top;
+        top = temp;
     }
 
     file.close();
     return true;
+}
+
+bool SupplyStack::viewPackedSuppliesWithSelection()
+{
+    if (top == NULL)
+    {
+        cout << "WARNING: No supplies currently packed.\n";
+        return false;
+    }
+    cout << "\n========== Available Supply Boxes ==========\n";
+    cout << "ID\t| Type\t\t| Quantity\n";
+    cout << "----------------------------------------\n";
+
+    SupplyBox *temp = top;
+    while (temp != NULL)
+    {
+        cout << temp->id << "\t| " << temp->type << "\t\t| " << temp->quantity << endl;
+        temp = temp->next;
+    }
+    return true;
+}
+
+bool SupplyStack::removeSupplyBoxById(int id)
+{
+    if (top == NULL)
+    {
+        return false;
+    }
+
+    if (top->id == id)
+    {
+        SupplyBox *temp = top;
+        top = top->next;
+        delete temp;
+        return true;
+    }
+
+    SupplyBox *current = top;
+    while (current->next != NULL && current->next->id != id)
+    {
+        current = current->next;
+    }
+
+    if (current->next != NULL && current->next->id == id)
+    {
+        SupplyBox *temp = current->next;
+        current->next = temp->next;
+        delete temp;
+        return true;
+    }
+
+    return false;
+}
+
+bool SupplyStack::assignSupplyToEmergency()
+{
+    loadFromCSV();
+
+    cout << "\n=== Assign Supply to Emergency Request ===\n";
+
+    EmergencyPriorityQueue emergency;
+    emergency.loadFromCSV();
+
+    cout << "\n--- Pending Emergency Requests (by Priority) ---\n";
+    if (!emergency.viewRequestsWithSelection())
+    {
+        cout << "No pending emergency requests found.\n";
+        return false;
+    }
+
+    cout << "\n--- Available Supply Boxes ---\n";
+    if (!viewPackedSuppliesWithSelection())
+    {
+        cout << "No supply boxes available.\n";
+        return false;
+    }
+
+    int supplyId;
+    string input;
+    cout << "\nEnter Supply Box ID to assign: ";
+    cin >> input;
+
+    bool isValid = true;
+    if (input.empty())
+    {
+        isValid = false;
+    }
+    else
+    {
+        for (char c : input)
+        {
+            if (!isdigit(c))
+            {
+                isValid = false;
+                break;
+            }
+        }
+    }
+
+    if (!isValid)
+    {
+        cout << "ERROR: Invalid input. Please enter a valid numeric ID.\n";
+        return false;
+    }
+
+    supplyId = stoi(input);
+
+    if (removeSupplyBoxById(supplyId))
+    {
+        cout << "SUCCESS: Supply Box ID " << supplyId << " has been assigned to emergency request.\n";
+        saveToCSV();
+        return true;
+    }
+    else
+    {
+        cout << "ERROR: Supply Box ID " << supplyId << " not found.\n";
+        return false;
+    }
 }

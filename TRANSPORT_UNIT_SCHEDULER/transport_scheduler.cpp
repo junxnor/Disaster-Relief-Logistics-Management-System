@@ -1,9 +1,36 @@
 #include "transport_scheduler.hpp"
+#include "../SUPPLY_BASE_MANAGER/supply_manager.hpp"
+#include <cctype>
 
 CircularQueue::CircularQueue()
 {
-    front = rear = -1;
+    head = NULL;
     count = 0;
+    maxSize = 10;
+}
+
+CircularQueue::~CircularQueue()
+{
+    while (head != NULL)
+    {
+        Vehicle *temp = head;
+        if (head->next == head)
+        {
+            head = NULL;
+        }
+        else
+        {
+            Vehicle *last = head;
+            while (last->next != head)
+            {
+                last = last->next;
+            }
+            last->next = head->next;
+            head = head->next;
+        }
+        delete temp;
+        count--;
+    }
 }
 
 bool CircularQueue::addVehicle(string id)
@@ -13,15 +40,30 @@ bool CircularQueue::addVehicle(string id)
         cout << "ERROR: Vehicle ID cannot be empty.\n";
         return false;
     }
-    if (count == MAX)
+    if (count == maxSize)
     {
         cout << "ERROR: Schedule full. Cannot add vehicle.\n";
         return false;
     }
-    if (front == -1)
-        front = 0;
-    rear = (rear + 1) % MAX;
-    vehicles[rear] = id;
+
+    Vehicle *newVehicle = new Vehicle{id, NULL};
+
+    if (head == NULL)
+    {
+        head = newVehicle;
+        newVehicle->next = head;
+    }
+    else
+    {
+        Vehicle *last = head;
+        while (last->next != head)
+        {
+            last = last->next;
+        }
+        last->next = newVehicle;
+        newVehicle->next = head;
+    }
+
     count++;
     cout << "SUCCESS: Vehicle " << id << " added to schedule.\n";
     return true;
@@ -34,10 +76,9 @@ bool CircularQueue::rotateVehicle()
         cout << "ERROR: No vehicles to rotate.\n";
         return false;
     }
-    string rotated = vehicles[front];
-    front = (front + 1) % MAX;
-    rear = (rear + 1) % MAX;
-    vehicles[rear] = rotated;
+
+    string rotated = head->id;
+    head = head->next;
     cout << "SUCCESS: Vehicle " << rotated << " rotated to end.\n";
     return true;
 }
@@ -51,12 +92,13 @@ bool CircularQueue::displayVehicles()
     }
     cout << "\n========== Current Vehicle Schedule ==========\n";
 
+    Vehicle *current = head;
     for (int i = 0; i < count; i++)
     {
-        int index = (front + i) % MAX;
         cout << "Position: " << (i + 1)
-             << " | Vehicle ID: " << vehicles[index]
+             << " | Vehicle ID: " << current->id
              << endl;
+        current = current->next;
     }
     return true;
 }
@@ -71,10 +113,14 @@ bool CircularQueue::saveToCSV()
 
     file << "Position,VehicleID\n";
 
-    for (int i = 0; i < count; i++)
+    if (count > 0)
     {
-        int index = (front + i) % MAX;
-        file << (i + 1) << "," << vehicles[index] << "\n";
+        Vehicle *current = head;
+        for (int i = 0; i < count; i++)
+        {
+            file << (i + 1) << "," << current->id << "\n";
+            current = current->next;
+        }
     }
 
     file.close();
@@ -92,10 +138,30 @@ bool CircularQueue::loadFromCSV()
     string line;
     getline(file, line);
 
-    front = rear = -1;
+    while (head != NULL)
+    {
+        Vehicle *temp = head;
+        if (head->next == head)
+        {
+            head = NULL;
+        }
+        else
+        {
+            Vehicle *last = head;
+            while (last->next != head)
+            {
+                last = last->next;
+            }
+            last->next = head->next;
+            head = head->next;
+        }
+        delete temp;
+        count--;
+    }
+
     count = 0;
 
-    while (getline(file, line) && count < MAX)
+    while (getline(file, line) && count < maxSize)
     {
         stringstream ss(line);
         string positionStr, vehicleID;
@@ -103,14 +169,87 @@ bool CircularQueue::loadFromCSV()
         if (getline(ss, positionStr, ',') &&
             getline(ss, vehicleID, ','))
         {
-            if (front == -1)
-                front = 0;
-            rear = (rear + 1) % MAX;
-            vehicles[rear] = vehicleID;
-            count++;
+            addVehicle(vehicleID);
         }
     }
 
     file.close();
     return true;
+}
+
+bool CircularQueue::scheduleVehicleForSupplyDelivery()
+{
+    loadFromCSV();
+
+    cout << "\n=== Schedule Vehicle for Supply Delivery ===\n";
+
+    cout << "\n--- Available Vehicles in Rotation ---\n";
+    if (!displayVehicles())
+    {
+        cout << "No vehicles available in rotation.\n";
+        return false;
+    }
+
+    SupplyStack supply;
+    supply.loadFromCSV();
+
+    cout << "\n--- Packed Supply Boxes ---\n";
+    if (!supply.viewPackedSuppliesWithSelection())
+    {
+        cout << "No supply boxes available.\n";
+        return false;
+    }
+
+    int supplyId;
+    string input;
+    cout << "\nEnter Supply Box ID to deliver: ";
+    cin >> input;
+
+    bool isValid = true;
+    if (input.empty())
+    {
+        isValid = false;
+    }
+    else
+    {
+        for (char c : input)
+        {
+            if (!isdigit(c))
+            {
+                isValid = false;
+                break;
+            }
+        }
+    }
+
+    if (!isValid)
+    {
+        cout << "ERROR: Invalid input. Please enter a valid numeric ID.\n";
+        return false;
+    }
+
+    supplyId = stoi(input);
+
+    if (count == 0)
+    {
+        cout << "ERROR: No vehicles available for delivery.\n";
+        return false;
+    }
+
+    string assignedVehicle = head->id;
+
+    if (supply.removeSupplyBoxById(supplyId))
+    {
+        cout << "SUCCESS: Supply Box ID " << supplyId << " has been assigned to Vehicle \""
+             << assignedVehicle << "\" for delivery.\n";
+        rotateVehicle();
+        supply.saveToCSV();
+        saveToCSV();
+        return true;
+    }
+    else
+    {
+        cout << "ERROR: Supply Box ID " << supplyId << " not found.\n";
+        return false;
+    }
 }

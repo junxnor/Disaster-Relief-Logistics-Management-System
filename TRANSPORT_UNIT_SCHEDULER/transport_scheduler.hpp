@@ -4,23 +4,30 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#define MAX 10
 using namespace std;
+
+struct Vehicle
+{
+    string id;
+    Vehicle *next;
+};
 
 class CircularQueue
 {
 private:
-    string vehicles[MAX];
-    int front, rear;
+    Vehicle *head;
     int count;
+    int maxSize;
 
 public:
     CircularQueue();
-    bool addVehicle(string id);
-    bool rotateVehicle(); // Dequeue + Enqueue
-    bool displayVehicles();
-    bool saveToCSV();   // Save to CSV
-    bool loadFromCSV(); // Load from CSV
+    ~CircularQueue();
+    bool addVehicle(string id);              // Enqueue
+    bool rotateVehicle();                    // Dequeue + Enqueue
+    bool displayVehicles();                  // Display all vehicles
+    bool saveToCSV();                        // Save to CSV
+    bool loadFromCSV();                      // Load from CSV
+    bool scheduleVehicleForSupplyDelivery(); // Integration function
 };
 
 #endif
