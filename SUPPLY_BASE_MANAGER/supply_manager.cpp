@@ -24,6 +24,11 @@ bool SupplyStack::packSupplyBox(int id, string type, int quantity)
         cout << "ERROR: Invalid quantity. Must be greater than 0.\n";
         return false;
     }
+    if (type.empty())
+    {
+        cout << "ERROR: Supply type cannot be empty.\n";
+        return false;
+    }
     if (id <= 0)
     {
         cout << "ERROR: Invalid ID. Must be greater than 0.\n";

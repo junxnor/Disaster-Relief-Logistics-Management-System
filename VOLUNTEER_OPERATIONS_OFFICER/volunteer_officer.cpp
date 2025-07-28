@@ -1,6 +1,7 @@
 #include "volunteer_officer.hpp"
 #include <algorithm>
 #include <cctype>
+#include "../EMERGENCY_REQUEST_COORDINATOR/emergency_requests.hpp"
 
 string trim(const string &str)
 {
@@ -12,7 +13,6 @@ string trim(const string &str)
     size_t last = str.find_last_not_of(' ');
     return str.substr(first, (last - first + 1));
 }
-#include "../EMERGENCY_REQUEST_COORDINATOR/emergency_requests.hpp"
 
 VolunteerQueue::VolunteerQueue()
 {
